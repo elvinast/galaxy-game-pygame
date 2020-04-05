@@ -17,7 +17,7 @@ fonts = pygame.font.get_fonts()
 
 screen = pygame.display.set_mode((800, 600))
 backgroundImage = pygame.image.load("bgbg.png")
-pygame.display.set_caption("K I L L   T H E   A L I E N S")
+pygame.display.set_caption("K I L L   T H E   A L I E N")
 gameIcon = pygame.image.load('logo.png')
 pygame.display.set_icon(gameIcon)
 font = pygame.font.SysFont('Times new roman', 32) 
@@ -41,7 +41,7 @@ player_y = 500
 enemyImage = pygame.image.load("enem.png")
 enemy_x = random.randint(0, 736)
 enemy_y = random.randint(20, 50)
-enemy_dx = 2
+enemy_dx = 5
 enemy_dy = 60
 
 
@@ -49,7 +49,6 @@ enemy_dy = 60
 def scores (x,y):
     res = font.render('s c o r e:  ' + str(score), True, (255, 255, 0)) #draw text on a new Surf
     screen.blit(res, (x,y))
-
 
 def player(x, y):
     screen.blit(playerImage, (x, y))
@@ -59,14 +58,12 @@ def enemy(x, y):
 
 def bullet(x,y):
     screen.blit(gameBullet, (x, y))
-
-
+    
 #----to check the collision
 def hits(enemy_x, enemy_y, bul_x, bul_y):
-    if (bul_x >= enemy_x and bul_x <= (enemy_x + 76)) and bul_y <= (enemy_y + 76):
+    if bul_x in range(enemy_x, enemy_x + 70) and bul_y in range(enemy_y, enemy_y + 70):
         return True
     return False
-
 
 def lose(enemy_y):
     if enemy_y > 400:
@@ -78,20 +75,25 @@ while not done:
         if event.type == pygame.QUIT:
             done = True
 
-
     pressed = pygame.key.get_pressed() 
 
-    if pressed[pygame.K_LEFT] and player_x > 3: 
-        player_x -= 3
-        bul_x -= 3
+    if pressed[pygame.K_LEFT]: 
+        player_x -= 5
+        bul_x -= 5
 
-    if pressed[pygame.K_RIGHT] and player_x < 800 - 64: 
-        player_x += 3 #границы
-        bul_x += 3
+    if pressed[pygame.K_RIGHT]: 
+        player_x += 5 #границы
+        bul_x += 5
 
-    # screen.fill((0, 0, 0))
+    
+    if (player_x < 0 or player_x > 800) and (bul_x < 0 or bul_x > 800):
+        if bul_y < 460:
+            player_x = (player_x + 800) % 800 
+        elif bul_y == 460:
+            player_x = (player_x + 800) % 800
+            bul_x = (bul_x + 800) % 800 
 
-
+    
     enemy_x += enemy_dx
     if enemy_x < 0 or enemy_x > 736:
         enemy_dx = -enemy_dx
@@ -105,7 +107,7 @@ while not done:
     if pressed[pygame.K_SPACE]:
         bulcnt = 1
     if bulcnt == 1:
-        bul_y -= 2
+        bul_y -= 5
         bul_x = pos_player + 20
 
     if bul_y == 0:
@@ -120,10 +122,9 @@ while not done:
         enemy_x = random.randint(0, 736)
         enemy_y = random.randint(20, 50)
         bul_y = 460
-        bul_x = pos_player + 20
+        bul_x = player_x + 20
         score += 1
         bulcnt = 0
-        
 
     if lose(enemy_y) or life == 0:
         if life > 1:
