@@ -58,12 +58,14 @@ def enemy(x, y):
 
 def bullet(x,y):
     screen.blit(gameBullet, (x, y))
-    
+
+
 #----to check the collision
 def hits(enemy_x, enemy_y, bul_x, bul_y):
     if bul_x in range(enemy_x, enemy_x + 70) and bul_y in range(enemy_y, enemy_y + 70):
         return True
     return False
+
 
 def lose(enemy_y):
     if enemy_y > 400:
@@ -74,6 +76,7 @@ while not done:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
+
 
     pressed = pygame.key.get_pressed() 
 
@@ -125,6 +128,7 @@ while not done:
         bul_x = player_x + 20
         score += 1
         bulcnt = 0
+        
 
     if lose(enemy_y) or life == 0:
         if life > 1:
@@ -137,16 +141,9 @@ while not done:
             res1 = font.render('T O T A L   S C O R E : ' + str(score), True, (0,0,0))
             screen.blit(res, (250,250))
             screen.blit(res1, (250,300))
-            # enemy_x = 730
-            # enemy_y = 0
-            enemy_dx = 0
-            enemy_dy = 0
-            enemy_x = 250
-            enemy_y = 450
-            player_x = 350
-            player_y = 450
-            bul_x = 370
-            bul_y = 410
+            pygame.display.update()
+            time.sleep(3)
+            pygame.quit()
             
     
     if life == 3:
